@@ -56,22 +56,26 @@ googleLink.addEventListener('click', e => {
 const canvas = document.getElementsByTagName('canvas')[0]
 resizeCanvas()
 
+let splatCount = 0
+splatCount = 0
+
 const config = {
   SIM_RESOLUTION: 128,
   DYE_RESOLUTION: 1024,
   CAPTURE_RESOLUTION: 512,
-  DENSITY_DISSIPATION: 0, // was 1
+  DENSITY_DISSIPATION: 0.2, // was 1
   VELOCITY_DISSIPATION: 1, // was 0.2
   PRESSURE: 0.8,
   PRESSURE_ITERATIONS: 20,
-  CURL: 0, // vorticity was 30
-  SPLAT_RADIUS: 0.25,
+  CURL: 0.5, // vorticity was 30
+  SPLAT_RADIUS: 0.250, // was .25
   SPLAT_FORCE: 6000,
-  SHADING: true,
+  SHADING: false, // was true
   COLORFUL: true,
   COLOR_UPDATE_SPEED: 10,
   PAUSED: false,
-  BACK_COLOR: { r: 0, g: 0, b: 0 },
+  // BACK_COLOR: { r: 0, g: 0, b: 0 },
+  BACK_COLOR: { r: 167, g: 83, b: 9 }, // espresso crema
   TRANSPARENT: false,
   BLOOM: false, // was true
   BLOOM_ITERATIONS: 8,
@@ -79,7 +83,7 @@ const config = {
   BLOOM_INTENSITY: 0.8,
   BLOOM_THRESHOLD: 0.6,
   BLOOM_SOFT_KNEE: 0.7,
-  SUNRAYS: true,
+  SUNRAYS: false, // was true
   SUNRAYS_RESOLUTION: 196,
   SUNRAYS_WEIGHT: 1.0
 }
@@ -280,6 +284,7 @@ function startGUI () {
   appIcon.className = 'icon app'
 
   if (isMobile()) { gui.close() }
+  gui.close() // this is mine!
 }
 
 function isMobile () {
@@ -1152,7 +1157,11 @@ function updateKeywords () {
 
 updateKeywords()
 initFramebuffers()
-multipleSplats(parseInt(Math.random() * 20) + 5)
+// multipleSplats(parseInt(Math.random() * 20) + 5)
+setInterval(() => {
+  if (config.PAUSED) return
+  multipleSplats(parseInt(Math.random() * 20) + 5)
+}, 1000)
 
 let lastUpdateTime = Date.now()
 let colorUpdateTimer = 0.0
@@ -1397,16 +1406,48 @@ function splatPointer (pointer) {
   splat(pointer.texcoordX, pointer.texcoordY, dx, dy, pointer.color)
 }
 
+function creamOrCrema () {
+  // const toggleCrema = splatCount % 2 === 0
+  const toggleCrema = false
+  if (toggleCrema) {
+    const norm = 255 * 5
+    return { r: 167 / norm, g: 83 / norm, b: 9 / norm } // espresso crema
+  }
+  return { r: 1, g: 0.992, b: 0.816 } // cream
+}
 function multipleSplats (amount) {
+  splatCount += 1
+  // splatCount = 1
+  amount = 1
+  console.log({ splatCount })
   for (let i = 0; i < amount; i++) {
-    const color = generateColor()
-    color.r *= 10.0
-    color.g *= 10.0
-    color.b *= 10.0
-    const x = Math.random()
-    const y = Math.random()
-    const dx = 1000 * (Math.random() - 0.5)
-    const dy = 1000 * (Math.random() - 0.5)
+    // const color = generateColor()
+    // color.r *= 10.0
+    // color.g *= 10.0
+    // color.b *= 10.0
+    // const x = Math.random()
+    // const y = Math.random()
+    // const dx = 1000 * (Math.random() - 0.5)
+    // const dy = 1000 * (Math.random() - 0.5)
+    // const color = { r: 1, g: 1, b: 1 } // white
+    // const color = { r: 1, g: 0.992, b: 0.816 } // cream
+    const color = creamOrCrema()
+    const x = 0.5
+    const y = 0.707
+    const dx = 0.0 * 1000
+    // const dy = -0.1 * 1000
+    const endOfLoop = (splatCount % 20 >= 16)
+    if (endOfLoop) {
+      config.SPLAT_RADIUS = 0.025
+      config.VELOCITY_DISSIPATION = 0
+      config.DENSITY_DISSIPATION = 0.5
+    } else {
+      config.SPLAT_RADIUS = 0.25
+      config.VELOCITY_DISSIPATION = 1
+      config.DENSITY_DISSIPATION = 0.2
+    }
+    const dy = (endOfLoop) ? -10 * 1000 : -0.1 * 1000
+    if (splatCount % 20 > 16) continue
     splat(x, y, dx, dy, color)
   }
 }
