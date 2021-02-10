@@ -1450,9 +1450,9 @@ function multipleSplats (amount) {
     config.VELOCITY_DISSIPATION = 2
     config.DENSITY_DISSIPATION = 0.3
     config.SPLAT_RADIUS = 0.05
-    config.CURL = 0.0 // 0.1 isfine too
+    config.CURL = 0 // 0.1 is fine too
     const speed = 0.07 * 1000
-    const steps = 20
+    const steps = 20 // period of wiggle
     const ramp = 0.07 * Math.abs(((splatCount % steps) / steps) - 0.5)
     const angle = ramp * Math.PI * 2 - Math.PI / 2
     const dx = speed * Math.cos(angle)
