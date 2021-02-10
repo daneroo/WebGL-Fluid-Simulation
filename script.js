@@ -1161,7 +1161,7 @@ initFramebuffers()
 setInterval(() => {
   if (config.PAUSED) return
   multipleSplats(parseInt(Math.random() * 20) + 5)
-}, 1000)
+}, 32)
 
 let lastUpdateTime = Date.now()
 let colorUpdateTimer = 0.0
@@ -1419,7 +1419,7 @@ function multipleSplats (amount) {
   splatCount += 1
   // splatCount = 1
   amount = 1
-  console.log({ splatCount })
+  // console.log({ splatCount })
   for (let i = 0; i < amount; i++) {
     // const color = generateColor()
     // color.r *= 10.0
@@ -1434,20 +1434,30 @@ function multipleSplats (amount) {
     const color = creamOrCrema()
     const x = 0.5
     const y = 0.707
-    const dx = 0.0 * 1000
+    // const dx = 0.0 * 1000
     // const dy = -0.1 * 1000
-    const endOfLoop = (splatCount % 20 >= 16)
-    if (endOfLoop) {
-      config.SPLAT_RADIUS = 0.025
-      config.VELOCITY_DISSIPATION = 0
-      config.DENSITY_DISSIPATION = 0.5
-    } else {
-      config.SPLAT_RADIUS = 0.25
-      config.VELOCITY_DISSIPATION = 1
-      config.DENSITY_DISSIPATION = 0.2
-    }
-    const dy = (endOfLoop) ? -10 * 1000 : -0.1 * 1000
-    if (splatCount % 20 > 16) continue
+    // const endOfLoop = (splatCount % 20 >= 16)
+    // if (endOfLoop) {
+    //   config.SPLAT_RADIUS = 0.025
+    //   config.VELOCITY_DISSIPATION = 0
+    //   config.DENSITY_DISSIPATION = 0.5
+    // } else {
+    //   config.SPLAT_RADIUS = 0.025
+    //   config.VELOCITY_DISSIPATION = 1
+    //   config.DENSITY_DISSIPATION = 0.2
+    // }
+    // const dy = (endOfLoop) ? -10 * 1000 : -0.1 * 1000
+    config.VELOCITY_DISSIPATION = 2
+    config.DENSITY_DISSIPATION = 0.3
+    config.SPLAT_RADIUS = 0.05
+    config.CURL = 0.0 // 0.1 isfine too
+    const speed = 0.07 * 1000
+    const steps = 20
+    const ramp = 0.07 * Math.abs(((splatCount % steps) / steps) - 0.5)
+    const angle = ramp * Math.PI * 2 - Math.PI / 2
+    const dx = speed * Math.cos(angle)
+    const dy = speed * Math.sin(angle)
+    if (splatCount % 600 > 300) continue
     splat(x, y, dx, dy, color)
   }
 }
