@@ -24,33 +24,6 @@ SOFTWARE.
 
 'use strict'
 
-// Mobile promo section
-
-const promoPopup = document.getElementsByClassName('promo')[0]
-const promoPopupClose = document.getElementsByClassName('promo-close')[0]
-
-if (isMobile()) {
-  setTimeout(() => {
-    promoPopup.style.display = 'table'
-  }, 20000)
-}
-
-promoPopupClose.addEventListener('click', e => {
-  promoPopup.style.display = 'none'
-})
-
-const appleLink = document.getElementById('apple_link')
-appleLink.addEventListener('click', e => {
-  ga('send', 'event', 'link promo', 'app')
-  window.open('https://apps.apple.com/us/app/fluid-simulation/id1443124993')
-})
-
-const googleLink = document.getElementById('google_link')
-googleLink.addEventListener('click', e => {
-  ga('send', 'event', 'link promo', 'app')
-  window.open('https://play.google.com/store/apps/details?id=games.paveldogreat.fluidsimfree')
-})
-
 // Simulation section
 
 const canvas = document.getElementsByTagName('canvas')[0]
@@ -70,7 +43,7 @@ const config = {
   CURL: 0.5, // vorticity was 30
   SPLAT_RADIUS: 0.250, // was .25
   SPLAT_FORCE: 6000,
-  SHADING: false, // was true
+  SHADING: true, // was true
   COLORFUL: true,
   COLOR_UPDATE_SPEED: 10,
   PAUSED: false,
@@ -117,7 +90,7 @@ if (!ext.supportLinearFiltering) {
   config.SUNRAYS = false
 }
 
-// startGUI()
+startGUI()
 
 function getWebGLContext (canvas) {
   const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false }
@@ -152,8 +125,6 @@ function getWebGLContext (canvas) {
     formatRG = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType)
     formatR = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType)
   }
-
-  ga('send', 'event', isWebGL2 ? 'webgl2' : 'webgl', formatRGBA == null ? 'not supported' : 'supported')
 
   return {
     gl,
@@ -234,54 +205,6 @@ function startGUI () {
   captureFolder.addColor(config, 'BACK_COLOR').name('background color')
   captureFolder.add(config, 'TRANSPARENT').name('transparent')
   captureFolder.add({ fun: captureScreenshot }, 'fun').name('take screenshot')
-
-  const github = gui.add({
-    fun: () => {
-      window.open('https://github.com/PavelDoGreat/WebGL-Fluid-Simulation')
-      ga('send', 'event', 'link button', 'github')
-    }
-  }, 'fun').name('Github')
-  github.__li.className = 'cr function bigFont'
-  github.__li.style.borderLeft = '3px solid #8C8C8C'
-  const githubIcon = document.createElement('span')
-  github.domElement.parentElement.appendChild(githubIcon)
-  githubIcon.className = 'icon github'
-
-  const twitter = gui.add({
-    fun: () => {
-      ga('send', 'event', 'link button', 'twitter')
-      window.open('https://twitter.com/PavelDoGreat')
-    }
-  }, 'fun').name('Twitter')
-  twitter.__li.className = 'cr function bigFont'
-  twitter.__li.style.borderLeft = '3px solid #8C8C8C'
-  const twitterIcon = document.createElement('span')
-  twitter.domElement.parentElement.appendChild(twitterIcon)
-  twitterIcon.className = 'icon twitter'
-
-  const discord = gui.add({
-    fun: () => {
-      ga('send', 'event', 'link button', 'discord')
-      window.open('https://discordapp.com/invite/CeqZDDE')
-    }
-  }, 'fun').name('Discord')
-  discord.__li.className = 'cr function bigFont'
-  discord.__li.style.borderLeft = '3px solid #8C8C8C'
-  const discordIcon = document.createElement('span')
-  discord.domElement.parentElement.appendChild(discordIcon)
-  discordIcon.className = 'icon discord'
-
-  const app = gui.add({
-    fun: () => {
-      ga('send', 'event', 'link button', 'app')
-      window.open('http://onelink.to/5b58bn')
-    }
-  }, 'fun').name('Check out mobile app')
-  app.__li.className = 'cr function appBigFont'
-  app.__li.style.borderLeft = '3px solid #00FF7F'
-  const appIcon = document.createElement('span')
-  app.domElement.parentElement.appendChild(appIcon)
-  appIcon.className = 'icon app'
 
   if (isMobile()) { gui.close() }
   gui.close() // this is mine!
