@@ -4,7 +4,7 @@
 
 ## TODO
 
-- Publish to gh pages (as is in `./site` folder)
+- Publish to gh pages (as is in `./docs` folder in main branch)
 - Uncaught DOMException: Failed to execute 'texImage2D' on 'WebGL2RenderingContext': The image element contains cross-origin data, and may not be loaded.
   - at Image.image.onload (file:///Users/daniel/Code/iMetrical/latte-art/site/script.js:1066:8)
 - Convert to nx and next.js
