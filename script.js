@@ -1457,7 +1457,7 @@ function multipleSplats (amount) {
     const angle = ramp * Math.PI * 2 - Math.PI / 2
     const dx = speed * Math.cos(angle)
     const dy = speed * Math.sin(angle)
-    if (splatCount % 600 > 300) continue
+    // if (splatCount % 600 > 300) continue
     splat(x, y, dx, dy, color)
   }
 }
