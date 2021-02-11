@@ -9,7 +9,7 @@
   - at Image.image.onload (file:///Users/daniel/Code/iMetrical/latte-art/site/script.js:1066:8)
 - Convert to nx and next.js
   - publish to vercel (latte-art.v.daneroo.com)
-## Forker from Upstream WebGL Fluid Simulation
+## Forked from Upstream WebGL Fluid Simulation
 
 [Original Demo](https://paveldogreat.github.io/WebGL-Fluid-Simulation/)
 
